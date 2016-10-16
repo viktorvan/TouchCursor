@@ -18,13 +18,13 @@ local touchCursor = hs.hotkey.modal.new()
 -- Publishes an alert if in debug mode
 function notify(msg) 
   if module.debug then 
-    --hs.alert(msg) 
+    hs.alert(msg) 
     hs.notify.new({title="Hammerspoon", informativeText=msg}):send()
   end
 end
 
 -- When spacebar has been held down long enough
-function onCountDown()
+function onCountDown() 
   --notify("Timer expired")
   module.countDownTimer = nil
   shouldSendSpace = false 
@@ -90,7 +90,7 @@ end
   enterTC = hs.hotkey.bind({}, "space", pressedSpace, releasedSpace, holdingSpace)
   enterTC2 = hs.hotkey.bind({"shift"}, "space", pressedSpace, releasedSpace, holdingSpace)
   enterTC3 = hs.hotkey.bind({"alt"}, "space", pressedSpace, releasedSpace, holdingSpace)
-  enterTC4 = hs.hotkey.bind({"shift", "alt"}, "space", pressedSpace, releasedSpace, holdingSpace)
+  enterTC4 = hs.hotkey.bind({"shift", "alt"}, "space", pressedSpace, releasedSpace, holdingSpace)  
 
 -- Disable TouchCursor in Parallels Desktop
 appWatcher = hs.application.watcher.new(onAppEvent):start()

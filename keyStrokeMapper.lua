@@ -1,6 +1,6 @@
 -- Helper method for sending a keystroke
 function send(modifier, key)
-  --notify("send {" .. table.concat(modifier, ", ") .. "} " .. key)
+  notify("send {" .. table.concat(modifier, ", ") .. "} " .. key)
   if not isVirtualMachine() then 
     --notify('in send ' .. table.concat(modifier, ', ') .. ' ' .. key)
     hs.eventtap.keyStroke(modifier, key) 
@@ -27,6 +27,6 @@ function mapFull(hotkey, keyFrom, keyTo)
   map(hotkey, {"shift"}, keyFrom, {"shift"}, keyTo)
   map(hotkey, {"alt"}, keyFrom, {"alt"}, keyTo)
   map(hotkey, {"cmd"}, keyFrom, {"cmd"}, keyTo)
-  map(hotkey, {"shift, alt"}, keyFrom, {"shift", "alt"}, keyTo)
+  map(hotkey, {"shift", "alt"}, keyFrom, {"shift", "alt"}, keyTo)
   map(hotkey, {"shift", "cmd"}, keyFrom, {"shift", "cmd"}, keyTo)
 end
