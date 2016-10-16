@@ -1,3 +1,5 @@
+local keyStroke = require("keyStrokeMapper")
+
 local module = {}
 
 -- Settings
@@ -55,49 +57,26 @@ function holdingSpace()
   --notify("Holding Space")
 end
 
--- Helper method for sending a keystroke
-function send(modifier, key)
-  --notify("send {" .. table.concat(modifier, ", ") .. "} " .. key)
-  hs.eventtap.keyStroke(modifier, key)
-end
-
--- Helper method for mapping one keystroke to another one
-function map(modifierFrom, keyFrom, modifierTo, keyTo)
-  touchCursor:bind(modifierFrom, keyFrom, function() send(modifierTo, keyTo) end, nil, function() send(modifierTo, keyTo) end)
-end
-
---[[  Helper method that performs all necessary mappings for arrow-keys functionality, 
-      i.e. adds mapping for all suitable modifiers.
-]]--
-function mapFull(keyFrom, keyTo)
-  map({}, keyFrom, {}, keyTo)
-
-  map({"shift"}, keyFrom, {"shift"}, keyTo)
-  map({"alt"}, keyFrom, {"alt"}, keyTo)
-  map({"cmd"}, keyFrom, {"cmd"}, keyTo)
-  map({"shift, alt"}, keyFrom, {"shift", "alt"}, keyTo)
-  map({"shift", "cmd"}, keyFrom, {"shift", "cmd"}, keyTo)
-end
 
 -- Setup space as hotkey for TouchCursor mode
 enterTC = hs.hotkey.bind({}, "space", pressedSpace, releasedSpace, holdingSpace)
 
 -- Setup arrow key navigation
-mapFull('N', 'Left')
-mapFull('U', 'Up')
-mapFull('E', 'Down')
-mapFull('I', 'Right')
+mapFull(touchCursor, 'N', 'Left')
+mapFull(touchCursor, 'U', 'Up')
+mapFull(touchCursor, 'E', 'Down')
+mapFull(touchCursor, 'I', 'Right')
 
 -- Setup additional navigation keys
-map({}, 'H', {}, 'pageup')
-map({"shift"}, 'H', {"shift"}, 'pageup')
-map({}, 'K', {}, 'pagedown')
-map({"shift"}, 'K', {"shift"}, 'pagedown')
-map({}, 'L', {"cmd"}, 'Left')
-map({}, 'Y', {"cmd"}, 'Right')
+map(touchCursor, {}, 'H', {}, 'pageup')
+map(touchCursor, {"shift"}, 'H', {"shift"}, 'pageup')
+map(touchCursor, {}, 'K', {}, 'pagedown')
+map(touchCursor, {"shift"}, 'K', {"shift"}, 'pagedown')
+map(touchCursor, {}, 'L', {"cmd"}, 'Left')
+map(touchCursor, {}, 'Y', {"cmd"}, 'Right')
 
 -- Setup other useful keys
-map({}, 33, {}, 'escape') -- Ö
-map({}, 'M', {}, 'forwarddelete')
+map(touchCursor, {}, 33, {}, 'escape') -- Ö
+map(touchCursor, {}, 'M', {}, 'forwarddelete')
 
 return module
