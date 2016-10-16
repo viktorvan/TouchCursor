@@ -17,7 +17,10 @@ local touchCursor = hs.hotkey.modal.new()
 
 -- Publishes an alert if in debug mode
 local function notify(msg) 
-  if module.debug then hs.alert(msg) end
+  if module.debug then 
+    --hs.alert(msg) 
+    hs.notify.new({title="Hammerspoon", informativeText=msg}):send()
+  end
 end
 
 -- When spacebar has been held down long enough
