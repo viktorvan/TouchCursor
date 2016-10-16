@@ -9,7 +9,7 @@ end
 
 function isVirtualMachine()
   local app = hs.application.frontmostApplication()
-  notify(app:name())
+  --notify(app:name())
   return app:name() == "Parallels Desktop"
 end
 
