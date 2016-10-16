@@ -1,7 +1,16 @@
 -- Helper method for sending a keystroke
 function send(modifier, key)
   --notify("send {" .. table.concat(modifier, ", ") .. "} " .. key)
-  hs.eventtap.keyStroke(modifier, key)
+  if not isVirtualMachine() then 
+    --notify('in send ' .. table.concat(modifier, ', ') .. ' ' .. key)
+    hs.eventtap.keyStroke(modifier, key) 
+  end
+end
+
+function isVirtualMachine()
+  local app = hs.application.frontmostApplication()
+  notify(app:name())
+  return app:name() == "Parallels Desktop"
 end
 
 -- Helper method for mapping one keystroke to another one
