@@ -81,7 +81,9 @@ map(touchCursor, {"shift"}, 'H', {"shift"}, 'pageup')
 map(touchCursor, {}, 'K', {}, 'pagedown')
 map(touchCursor, {"shift"}, 'K', {"shift"}, 'pagedown')
 map(touchCursor, {}, 'L', {"cmd"}, 'Left')
+map(touchCursor, {"shift"}, 'L', {"shift", "cmd"}, 'Left')
 map(touchCursor, {}, 'Y', {"cmd"}, 'Right')
+map(touchCursor, {"shift"}, 'Y', {"shift", "cmd"}, 'Right')
 
 -- Setup other useful keys
 map(touchCursor, {}, 33, {}, 'escape') -- Ö
