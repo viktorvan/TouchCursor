@@ -68,6 +68,8 @@ end
 -- Setup space as hotkey for TouchCursor mode
 enterTC = hs.hotkey.bind({}, "space", pressedSpace, releasedSpace, holdingSpace)
 enterTC2 = hs.hotkey.bind({"shift"}, "space", pressedSpace, releasedSpace, holdingSpace)
+enterTC3 = hs.hotkey.bind({"alt"}, "space", pressedSpace, releasedSpace, holdingSpace)
+enterTC4 = hs.hotkey.bind({"shift", "alt"}, "space", pressedSpace, releasedSpace, holdingSpace)
 
 -- Setup arrow key navigation
 mapFull(touchCursor, 'N', 'Left')
