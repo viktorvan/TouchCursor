@@ -45,9 +45,9 @@ function releasedSpace()
   module.countDownTimer = nil
   if module.shouldSendSpace then 
     notify("sending space")
-    enterTC:disable()
+    disableTC()
     hs.eventtap.keyStroke({}, 'space') 
-    enterTC:enable()
+    enableTC()
   end
   notify("TouchCursor OFF")
 end 
@@ -57,9 +57,17 @@ function holdingSpace()
   --notify("Holding Space")
 end
 
+function disableTC()
+  enterTC:disable()
+end
+
+function enableTC()
+  enterTC:enable()
+end
 
 -- Setup space as hotkey for TouchCursor mode
 enterTC = hs.hotkey.bind({}, "space", pressedSpace, releasedSpace, holdingSpace)
+enterTC2 = hs.hotkey.bind({"shift"}, "space", pressedSpace, releasedSpace, holdingSpace)
 
 -- Setup arrow key navigation
 mapFull(touchCursor, 'N', 'Left')
