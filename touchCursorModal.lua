@@ -144,11 +144,10 @@ function mapFull(hotkey, keyFrom, keyTo)
   map(hotkey, {"shift"}, keyFrom, {"shift"}, keyTo)
   map(hotkey, {"alt"}, keyFrom, {"alt"}, keyTo)
   map(hotkey, {"cmd"}, keyFrom, {"cmd"}, keyTo)
+  map(hotkey, {"ctrl"}, keyFrom, {"ctrl"}, keyTo)  
   map(hotkey, {"shift", "alt"}, keyFrom, {"shift", "alt"}, keyTo)
   map(hotkey, {"shift", "cmd"}, keyFrom, {"shift", "cmd"}, keyTo)
 end
-
-
 
 -- Setup space as hotkey for TouchCursor mode
   enterTC = hs.hotkey.bind({}, "space", pressedSpace, releasedSpace, holdingSpace)
@@ -180,6 +179,3 @@ map(touchCursor, {}, 33, {}, 'escape') -- Ö
 map(touchCursor, {}, 'M', {}, 'forwarddelete')
 
 return module
-
-
-
