@@ -1,4 +1,4 @@
-local keyStroke = require("keyStrokeMapper")
+--local keyStroke = require("keyStrokeMapper")
 
 local module = {}
 
@@ -11,6 +11,8 @@ local module = {}
 ]]--
 module.timeFrame = 0.2
 module.debug = false
+module.inAlfred = false
+module.inParallels = false
 
 -- Modal hotkey for Touch-cursor mode
 local touchCursor = hs.hotkey.modal.new()
@@ -19,7 +21,7 @@ local touchCursor = hs.hotkey.modal.new()
 function notify(msg) 
   if module.debug then 
     hs.alert(msg) 
-    hs.notify.new({title="Hammerspoon", informativeText=msg}):send()
+    --hs.notify.new({title="Hammerspoon", informativeText=msg}):send()
   end
 end
 
@@ -42,7 +44,7 @@ end
       module.timeframe then a "real" space key-stroke is sent.
 ]]--
 function releasedSpace()
-  --notify("releasedSpace")
+  --hs.alert("releasedSpace")
   touchCursor:exit()
   if module.countDownTimer then module.countDownTimer:stop() end
   module.countDownTimer = nil
@@ -61,6 +63,7 @@ function holdingSpace()
 end
 
 function enableTC()
+  --hs.alert("enableTC")  
   enterTC:enable()
   enterTC2:enable()
   enterTC3:enable()
@@ -68,6 +71,7 @@ function enableTC()
 end
 
 function disableTC()
+  --hs.alert("disableTC")
   enterTC:disable()
   enterTC2:disable()
   enterTC3:disable()
@@ -75,24 +79,84 @@ function disableTC()
 end
 
 function onAppEvent(appName, event, app)
+  exitAlfred()
   if appName == 'Parallels Desktop' then
     if event == hs.application.watcher.activated then
-      --notify("Disabling TC")
+      --hs.alert("Disabling TC")
       disableTC()
+      inParallels = true
     elseif event == hs.application.watcher.deactivated then
       --notify("Enabling TC")
+      inParallels = false
       enableTC()
-    end
+    end  
   end
 end 
+
+function enterAlfred()
+  if inParallels then
+    if not inAlfred then
+    hs.alert("Enabling touch-cursor")
+    inAlfred = true
+    enableTC()
+    else
+      inAlfred = false
+        hs.alert("Disabling touch-cursor")
+        disableTC()
+    end
+  end
+  hs.eventtap.keyStroke({"cmd"}, "space")
+end
+
+function exitAlfred()
+  inAlfred = false
+  if inParallels then
+    disableTC()
+  end
+end 
+
+-- Helper method for sending a keystroke
+function send(modifier, key)
+  notify("send {" .. table.concat(modifier, ", ") .. "} " .. key)
+  if inAlfred or not isVirtualMachine() then 
+    --notify('in send ' .. table.concat(modifier, ', ') .. ' ' .. key)
+    hs.eventtap.keyStroke(modifier, key) 
+  end
+end
+
+function isVirtualMachine()
+  local app = hs.application.frontmostApplication()
+  notify(app:name())
+  return app:name() == "Parallels Desktop"
+end
+
+-- Helper method for mapping one keystroke to another one
+function map(hotkey, modifierFrom, keyFrom, modifierTo, keyTo)
+  hotkey:bind(modifierFrom, keyFrom, function() send(modifierTo, keyTo) end, nil, function() send(modifierTo, keyTo) end)
+end
+
+--[[  Helper method that performs all necessary mappings for arrow-keys functionality, 
+      i.e. adds mapping for all suitable modifiers.
+]]--
+function mapFull(hotkey, keyFrom, keyTo)
+  map(hotkey, {}, keyFrom, {}, keyTo)
+
+  map(hotkey, {"shift"}, keyFrom, {"shift"}, keyTo)
+  map(hotkey, {"alt"}, keyFrom, {"alt"}, keyTo)
+  map(hotkey, {"cmd"}, keyFrom, {"cmd"}, keyTo)
+  map(hotkey, {"shift", "alt"}, keyFrom, {"shift", "alt"}, keyTo)
+  map(hotkey, {"shift", "cmd"}, keyFrom, {"shift", "cmd"}, keyTo)
+end
+
+
 
 -- Setup space as hotkey for TouchCursor mode
   enterTC = hs.hotkey.bind({}, "space", pressedSpace, releasedSpace, holdingSpace)
   enterTC2 = hs.hotkey.bind({"shift"}, "space", pressedSpace, releasedSpace, holdingSpace)
   enterTC3 = hs.hotkey.bind({"alt"}, "space", pressedSpace, releasedSpace, holdingSpace)
   enterTC4 = hs.hotkey.bind({"shift", "alt"}, "space", pressedSpace, releasedSpace, holdingSpace)  
+  hs.hotkey.bind({"ctrl"}, "space", enterAlfred, nil, nil):enable()
 
--- Disable TouchCursor in Parallels Desktop
 appWatcher = hs.application.watcher.new(onAppEvent):start()
 
 -- Setup arrow key navigation
@@ -116,3 +180,6 @@ map(touchCursor, {}, 33, {}, 'escape') -- Ö
 map(touchCursor, {}, 'M', {}, 'forwarddelete')
 
 return module
+
+
+
