@@ -20,8 +20,8 @@ local touchCursor = hs.hotkey.modal.new()
 -- Publishes an alert if in debug mode
 function notify(msg) 
   if module.debug then 
-    hs.alert(msg) 
-    --hs.notify.new({title="Hammerspoon", informativeText=msg}):send()
+    --hs.alert(msg) 
+    hs.notify.new({title="Hammerspoon", informativeText=msg}):send()
   end
 end
 
@@ -96,12 +96,12 @@ end
 function enterAlfred()
   if inParallels then
     if not inAlfred then
-    hs.alert("Enabling touch-cursor")
+    --notify("Enabling touch-cursor")
     inAlfred = true
     enableTC()
     else
       inAlfred = false
-        hs.alert("Disabling touch-cursor")
+        --notify("Disabling touch-cursor")
         disableTC()
     end
   end
@@ -111,13 +111,14 @@ end
 function exitAlfred()
   inAlfred = false
   if inParallels then
+    --notify("Disabling touch-cursor")
     disableTC()
   end
 end 
 
 -- Helper method for sending a keystroke
 function send(modifier, key)
-  notify("send {" .. table.concat(modifier, ", ") .. "} " .. key)
+  --notify("send {" .. table.concat(modifier, ", ") .. "} " .. key)
   if inAlfred or not isVirtualMachine() then 
     --notify('in send ' .. table.concat(modifier, ', ') .. ' ' .. key)
     hs.eventtap.keyStroke(modifier, key) 
@@ -126,7 +127,7 @@ end
 
 function isVirtualMachine()
   local app = hs.application.frontmostApplication()
-  notify(app:name())
+  --notify(app:name())
   return app:name() == "Parallels Desktop"
 end
 
@@ -154,7 +155,7 @@ end
   enterTC2 = hs.hotkey.bind({"shift"}, "space", pressedSpace, releasedSpace, holdingSpace)
   enterTC3 = hs.hotkey.bind({"alt"}, "space", pressedSpace, releasedSpace, holdingSpace)
   enterTC4 = hs.hotkey.bind({"shift", "alt"}, "space", pressedSpace, releasedSpace, holdingSpace)  
-  hs.hotkey.bind({"ctrl"}, "space", enterAlfred, nil, nil):enable()
+  hs.hotkey.bind({"ctrl", "cmd"}, "space", enterAlfred, nil, nil):enable()
 
 appWatcher = hs.application.watcher.new(onAppEvent):start()
 
@@ -175,7 +176,7 @@ map(touchCursor, {}, 'Y', {"cmd"}, 'Right')
 map(touchCursor, {"shift"}, 'Y', {"shift", "cmd"}, 'Right')
 
 -- Setup other useful keys
-map(touchCursor, {}, 33, {}, 'escape') -- Ö
+map(touchCursor, {}, 41, {}, 'escape') -- Ö
 map(touchCursor, {}, 'M', {}, 'forwarddelete')
 
 return module
