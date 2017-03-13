@@ -51,7 +51,7 @@ function releasedSpace()
   if shouldSendSpace then 
     --notify("sending space")
     disableTC()
-    hs.eventtap.keyStroke({}, 'space') 
+    keyStrokeNoDelay({}, 'space') 
     enableTC()
   end
   --notify("TouchCursor OFF")
@@ -105,7 +105,7 @@ function enterAlfred()
         disableTC()
     end
   end
-  hs.eventtap.keyStroke({"cmd"}, "space")
+  keyStrokeNoDelay({"cmd"}, "space")
 end
 
 function exitAlfred()
@@ -121,8 +121,15 @@ function send(modifier, key)
   --notify("send {" .. table.concat(modifier, ", ") .. "} " .. key)
   if inAlfred or not isVirtualMachine() then 
     --notify('in send ' .. table.concat(modifier, ', ') .. ' ' .. key)
-    hs.eventtap.keyStroke(modifier, key) 
+    keyStrokeNoDelay(modifier, key) 
   end
+end
+
+-- Helper method for sending keystroke without Hammerspoons repeat-delay of 200 ms
+function keyStrokeNoDelay(modifier, key)
+    hs.eventtap.event.newKeyEvent(modifier, string.lower(key), true):post()
+    hs.timer.usleep(1000)
+    hs.eventtap.event.newKeyEvent(modifier, string.lower(key), false):post()
 end
 
 function isVirtualMachine()
