@@ -9,7 +9,7 @@ local module = {}
       module.debug
       Set to true to enable alerts
 ]]--
-module.timeFrame = 0.2
+module.timeFrame = 0.15
 module.debug = false
 module.inAlfred = false
 module.inParallels = false
@@ -162,7 +162,7 @@ end
   enterTC2 = hs.hotkey.bind({"shift"}, "space", pressedSpace, releasedSpace, holdingSpace)
   enterTC3 = hs.hotkey.bind({"alt"}, "space", pressedSpace, releasedSpace, holdingSpace)
   enterTC4 = hs.hotkey.bind({"shift", "alt"}, "space", pressedSpace, releasedSpace, holdingSpace)  
-  hs.hotkey.bind({"ctrl", "cmd"}, "space", enterAlfred, nil, nil):enable()
+  -- hs.hotkey.bind({"ctrl", "cmd"}, "space", enterAlfred, nil, nil):enable()
 
 appWatcher = hs.application.watcher.new(onAppEvent):start()
 
